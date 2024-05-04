@@ -3,8 +3,8 @@ A simple To-Do app using Compose.
 
 ## Features
 - [x] Add To-Do
-  - [ ] Title
-  - [ ] Description
+  - [x] Title
+  - [x] Description
   - [ ] Flag
   - [ ] Priority
   - [ ] Set Due At
