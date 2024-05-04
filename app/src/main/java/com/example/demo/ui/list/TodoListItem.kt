@@ -9,6 +9,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -122,6 +127,17 @@ private fun EditableTodo(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
+        // Flag toggle
+        IconButton(
+            onClick = {
+                onEdit(todo.copy(isFlagged = !todo.isFlagged))
+            },
+        ) {
+            Icon(
+                imageVector = if (todo.isFlagged) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = "Flag",
+            )
+        }
         Text("Priority: ")
         Priority.entries.forEach { priority ->
             val backgroundColor =

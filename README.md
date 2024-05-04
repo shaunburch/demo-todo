@@ -7,7 +7,7 @@ A simple To-Do app using Compose.
 - [x] Add To-Do
   - [x] Title
   - [x] Description
-  - [ ] Flag
+  - [x] Flag
   - [x] Priority
   - [ ] Set Due At
 - [ ] Remove To-Do
