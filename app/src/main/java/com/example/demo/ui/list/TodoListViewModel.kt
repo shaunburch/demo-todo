@@ -13,8 +13,7 @@ class TodoListViewModel : ViewModel() {
 
     fun onEvent(event: TodoListEvent) {
         when (event) {
-            is TodoListEvent.AddTodo -> addTodo(event.todo)
-            is TodoListEvent.RemoveTodo -> removeTodo(event.id)
+            TodoListEvent.CreateTodo -> TODO()
         }
     }
 
