@@ -1,3 +1,5 @@
+[![Android CI](https://github.com/shaunburch/demo-todo/actions/workflows/android.yml/badge.svg)](https://github.com/shaunburch/demo-todo/actions/workflows/android.yml)
+
 # Demo To-Do
 A simple To-Do app using Compose.
 
@@ -6,7 +8,7 @@ A simple To-Do app using Compose.
   - [x] Title
   - [x] Description
   - [ ] Flag
-  - [ ] Priority
+  - [x] Priority
   - [ ] Set Due At
 - [ ] Remove To-Do
 - [ ] Complete To-Do
