@@ -18,4 +18,14 @@ enum class Priority {
     LOW,
     MEDIUM,
     HIGH,
+    ;
+
+    override fun toString(): String {
+        return when (this) {
+            NONE -> "None"
+            LOW -> "Low"
+            MEDIUM -> "Medium"
+            HIGH -> "High"
+        }
+    }
 }
