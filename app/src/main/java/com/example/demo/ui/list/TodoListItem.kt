@@ -10,19 +10,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +42,9 @@ import androidx.compose.ui.unit.dp
 import com.example.demo.data.Priority
 import com.example.demo.data.Todo
 import com.example.demo.ui.theme.DemoTheme
+import java.time.Instant
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -74,6 +88,7 @@ private fun ReadOnlyTodo(todo: Todo) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EditableTodo(
     todo: Todo,
@@ -81,6 +96,8 @@ private fun EditableTodo(
     focusManager: FocusManager,
 ) {
     val focusNext = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
+    var showDatePicker by remember { mutableStateOf(false) }
+
     TextField(
         modifier =
             Modifier
@@ -98,6 +115,7 @@ private fun EditableTodo(
             Modifier
                 .fillMaxWidth(),
         placeholder = { Text("Description") },
+        leadingIcon = { Icon(Icons.Default.Info, contentDescription = "Description") },
         value = todo.description,
         onValueChange = {
             onEdit(todo.copy(description = it))
@@ -105,18 +123,61 @@ private fun EditableTodo(
         singleLine = true,
         keyboardActions = focusNext,
     )
-    TextField(
-        modifier =
-            Modifier
-                .fillMaxWidth(),
-        placeholder = { Text("Due") },
-        value = todo.dueAt?.toString() ?: "",
-        onValueChange = {
-            onEdit(todo.copy(dueAt = OffsetDateTime.parse(it)))
-        },
-        singleLine = true,
-        keyboardActions = focusNext,
-    )
+    if (showDatePicker) {
+        val datePickerState =
+            rememberDatePickerState(
+                initialSelectedDateMillis = todo.dueAt?.toInstant()?.toEpochMilli(),
+                initialDisplayMode = DisplayMode.Input,
+            )
+        DatePicker(datePickerState)
+        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+            // Done and Cancel buttons
+            TextButton(
+                onClick = {
+                    showDatePicker = false
+                },
+            ) {
+                Text(text = "Cancel")
+            }
+            TextButton(
+                onClick = {
+                    showDatePicker = false
+                    datePickerState.selectedDateMillis?.let {
+                        onEdit(
+                            todo.copy(
+                                dueAt =
+                                    OffsetDateTime.ofInstant(
+                                        Instant.ofEpochMilli(it),
+                                        ZoneId.systemDefault(),
+                                    ),
+                            ),
+                        )
+                    }
+                },
+            ) {
+                Text(text = "Done")
+            }
+        }
+    } else {
+        TextField(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) showDatePicker = true
+                    },
+            readOnly = true,
+            placeholder = { Text("Due") },
+            leadingIcon = { Icon(Icons.Default.DateRange, contentDescription = "Due") },
+            value = todo.dueAt?.toString() ?: "",
+            onValueChange = {
+                onEdit(todo.copy(dueAt = OffsetDateTime.parse(it)))
+            },
+            singleLine = true,
+            keyboardActions = focusNext,
+        )
+    }
+    HorizontalDivider()
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
