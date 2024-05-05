@@ -80,6 +80,7 @@ private fun EditableTodo(
     onEdit: (Todo) -> Unit,
     focusManager: FocusManager,
 ) {
+    val focusNext = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
     TextField(
         modifier =
             Modifier
@@ -90,10 +91,7 @@ private fun EditableTodo(
             onEdit(todo.copy(title = it))
         },
         singleLine = true,
-        keyboardActions =
-            KeyboardActions {
-                focusManager.moveFocus(FocusDirection.Next)
-            },
+        keyboardActions = focusNext,
     )
     TextField(
         modifier =
@@ -105,11 +103,7 @@ private fun EditableTodo(
             onEdit(todo.copy(description = it))
         },
         singleLine = true,
-        keyboardActions =
-            KeyboardActions {
-                focusManager.clearFocus()
-                onEdit(todo.copy(isEditing = false))
-            },
+        keyboardActions = focusNext,
     )
     TextField(
         modifier =
@@ -121,6 +115,7 @@ private fun EditableTodo(
             onEdit(todo.copy(dueAt = OffsetDateTime.parse(it)))
         },
         singleLine = true,
+        keyboardActions = focusNext,
     )
     Row(
         modifier = Modifier.fillMaxWidth(),
