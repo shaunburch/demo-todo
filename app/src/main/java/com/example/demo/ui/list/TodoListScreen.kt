@@ -10,10 +10,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -42,6 +44,13 @@ fun TodoListScreen() {
                         imageVector = Icons.AutoMirrored.Filled.List,
                         contentDescription = "Menu",
                     )
+                },
+                actions = {
+                    if (state.todos.any { it.isEditing }) {
+                        IconButton(onClick = { vm.onEvent(TodoListEvent.StopEditing) }) {
+                            Icon(imageVector = Icons.Default.Check, contentDescription = "Done")
+                        }
+                    }
                 },
             )
         },

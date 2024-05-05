@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -86,7 +85,18 @@ private fun ReadOnlyTodo(todo: Todo) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
         ) {
-            if (todo.priority != Priority.NONE) Text("Priority: ${todo.priority}")
+            when (todo.priority) {
+                Priority.NONE -> null
+                Priority.LOW -> "•" to Color.Black
+                Priority.MEDIUM -> "••" to Color(0xFFFFA500)
+                Priority.HIGH -> "•••" to Color.Red
+            }?.let { (text, color) ->
+                Text(
+                    text,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = color,
+                )
+            }
             val formatter = remember { DateTimeFormatter.ofPattern(FORMAT_DUE_AT) }
             todo.dueAt?.let { Text("Due: ${it.format(formatter)}") }
         }
@@ -126,7 +136,6 @@ private fun EditableTodo(
             Modifier
                 .fillMaxWidth(),
         placeholder = { Text("Description") },
-        leadingIcon = { Icon(Icons.Default.Info, contentDescription = "Description") },
         value = todo.description,
         onValueChange = {
             onEdit(todo.copy(description = it))
