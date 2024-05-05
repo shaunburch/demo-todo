@@ -3,6 +3,8 @@
 # Demo To-Do
 A simple To-Do app using Compose.
 
+<img width=300 src="https://github.com/shaunburch/demo-todo/assets/45771676/0a963414-7822-4dc5-8ef6-80e8e10cdb5b"/>
+
 ## Features
 - [x] Add To-Do
   - [x] Title
@@ -12,6 +14,3 @@ A simple To-Do app using Compose.
   - [x] Set Due At
 - [ ] Remove To-Do
 - [ ] Complete To-Do
-
-## Video
-[demo.webm](https://github.com/shaunburch/demo-todo/assets/45771676/16a75471-5b12-4da9-a8b2-112b95445bb2)
