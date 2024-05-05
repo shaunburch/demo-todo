@@ -6,4 +6,6 @@ sealed class TodoListEvent {
     data class Edit(val todo: Todo) : TodoListEvent()
 
     data object CreateTodo : TodoListEvent()
+
+    data object StopEditing : TodoListEvent()
 }

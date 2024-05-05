@@ -14,7 +14,14 @@ class TodoListViewModel : ViewModel() {
         when (event) {
             TodoListEvent.CreateTodo -> createTodo()
             is TodoListEvent.Edit -> editTodo(event.todo)
+            TodoListEvent.StopEditing -> stopEditing()
         }
+    }
+
+    private fun stopEditing() {
+        val currentList = _uiState.value.todos
+        val updatedList = currentList.map { it.copy(isEditing = false) }
+        _uiState.value = TodoListState(updatedList)
     }
 
     private fun editTodo(todo: Todo) {
