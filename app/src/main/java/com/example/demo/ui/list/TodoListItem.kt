@@ -2,7 +2,6 @@ package com.example.demo.ui.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -58,7 +60,6 @@ fun TodoListItem(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .focusGroup()
                 .clickable {
                     onEdit(todo.copy(isEditing = true))
                 },
@@ -95,13 +96,19 @@ private fun EditableTodo(
     onEdit: (Todo) -> Unit,
     focusManager: FocusManager,
 ) {
-    val focusNext = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
+    val focusRequester = remember { FocusRequester() }
     var showDatePicker by remember { mutableStateOf(false) }
+    val focusNext = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     TextField(
         modifier =
             Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
         placeholder = { Text("Title") },
         value = todo.title,
         onValueChange = {
