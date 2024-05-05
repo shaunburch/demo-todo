@@ -75,17 +75,21 @@ fun TodoListItem(
     }
 }
 
+const val FORMAT_DUE_AT = "M/d/yy hh:mm a"
+
 @Composable
 private fun ReadOnlyTodo(todo: Todo) {
-    Text(todo.title)
-    Text(todo.description)
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-    ) {
-        if (todo.priority != Priority.NONE) Text("Priority: ${todo.priority}")
-        val formatter = remember { DateTimeFormatter.ofPattern("M/d/yy hh:mm a") }
-        todo.dueAt?.let { Text("Due: ${it.format(formatter)}") }
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Text(todo.title, style = MaterialTheme.typography.headlineSmall)
+        Text(todo.description, style = MaterialTheme.typography.bodyLarge)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+        ) {
+            if (todo.priority != Priority.NONE) Text("Priority: ${todo.priority}")
+            val formatter = remember { DateTimeFormatter.ofPattern(FORMAT_DUE_AT) }
+            todo.dueAt?.let { Text("Due: ${it.format(formatter)}") }
+        }
     }
 }
 
@@ -176,7 +180,7 @@ private fun EditableTodo(
             readOnly = true,
             placeholder = { Text("Due") },
             leadingIcon = { Icon(Icons.Default.DateRange, contentDescription = "Due") },
-            value = todo.dueAt?.toString() ?: "",
+            value = todo.dueAt?.format(DateTimeFormatter.ofPattern(FORMAT_DUE_AT)) ?: "",
             onValueChange = {
                 onEdit(todo.copy(dueAt = OffsetDateTime.parse(it)))
             },
