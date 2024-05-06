@@ -1,5 +1,6 @@
 package com.example.demo.ui.list
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -63,7 +64,8 @@ fun TodoListItem(
                     onEdit(todo.copy(isEditing = true))
                 },
     ) {
-        val color = if (todo.isFlagged) Color(0xFFFFF59D) else Color.Transparent
+        // yellow with 50% opacity
+        val color = if (todo.isFlagged) Color.Yellow.copy(alpha = 0.3f) else Color.Transparent
         Column(modifier = Modifier.background(color)) {
             if (todo.isEditing) {
                 EditableTodo(todo, onEdit, focusManager)
@@ -87,7 +89,7 @@ private fun ReadOnlyTodo(todo: Todo) {
         ) {
             when (todo.priority) {
                 Priority.NONE -> null
-                Priority.LOW -> "•" to Color.Black
+                Priority.LOW -> "•" to MaterialTheme.colorScheme.onSurface
                 Priority.MEDIUM -> "••" to Color(0xFFFFA500)
                 Priority.HIGH -> "•••" to Color.Red
             }?.let { (text, color) ->
@@ -236,6 +238,7 @@ private fun EditableTodo(
 }
 
 @Preview(showBackground = true, name = "To Do")
+@Preview(showBackground = true, name = "To Do (Night)", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun Preview() {
     DemoTheme {
@@ -253,6 +256,7 @@ private fun Preview() {
 }
 
 @Preview(showBackground = true, name = "To Do – Edit Mode")
+@Preview(showBackground = true, name = "To Do – Edit Mode (Night)", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun PreviewEdit() {
     DemoTheme {
